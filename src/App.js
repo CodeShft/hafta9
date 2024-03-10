@@ -1,25 +1,29 @@
 import { useEffect, useState } from "react";
 
-
-
 function App() {
-  const[paragrafGoster, paragrafIslem] =useState(true)
-  const [sayac,sayacGuncelle]=useState(0)
+  const [yukleniyor, yukleniyorGuncelle] = useState(true)
+  const [data, setData] = useState([]);
 
-  useEffect( ()=>
-  {console.log("1.effect çalıştı");} , [sayac])
+  useEffect(() => {
 
+    async function fetchData() {
+      const response = await fetch('https://jsonplaceholder.org/users');
+      const jsObjectData = await response.json();
+      setData(jsObjectData);
+      yukleniyorGuncelle(false)
+    };
 
-  useEffect( ()=>
-  {console.log("2.effect çalıştı");})
- 
+    setTimeout( fetchData , 2000 )
 
+  }, []); 
 
+  console.log(data);
 
   return (
-  <>
-  Sayaç:{sayac}
-  </>
+    <>
+      { yukleniyor && <p>Yükleniyor..</p> }
+      {  data.map(  kisi => <p key={kisi.id}> {kisi.firstname} </p> )  }
+    </>
   );
 }
 
